@@ -1,17 +1,43 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Auth(){
+
     const [ mode, setMode ] = useState("signup");
-    const { register, handleSubmit, formState: { errors }} = useForm();
-    function onSubmit(){
-        alert(`success ${mode}`);
+    
+    const { register, handleSubmit, formState: { errors } } = useForm();
+
+    const { signUp, logIn, user, logOut } = useContext(AuthContext);
+
+    const [ error, setError] = useState(null);
+
+    const navigate = useNavigate();
+
+    function onSubmit(data) {
+        const res = (mode === "signup") ? signUp(data.email, data.password) : logIn(data.email, data.password);
+        
+        //alert(res.message);
+        if(res.success == false){
+            setError(res.message);
+        }
+        else {
+            navigate("/");
+            setError(null)
+        }
+        
+        //alert(`success ${mode}`);
     }
+    
     return (
         <div className="page">
             <div className="container">
                 <div className="auth-container">
                     <h1 className="page-title"> { mode === 'signup' ? "Sign Up" : "Log In" } </h1>
+                    <button onClick={()=>logOut()}>Logout</button> <br/>
+                    {user} <br/>
+                    {error && <div className="error-message"> {error} </div>}
                     <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
                         <div className="form-group">
                             <label htmlFor="email" className="form-label">Email</label>
@@ -20,7 +46,17 @@ export default function Auth(){
                         </div>
                         <div className="form-group">
                             <label htmlFor="password" className="form-label">Password</label>
-                            <input type="password" id="password" className="form-input" {...register("password", { required: "An password is needed"} ) } />
+                            <input type="password" id="password" className="form-input" {...register("password", {
+                                 required: "An password is needed",
+                                 minLength: {
+                                    value: 8,
+                                    message: "Password must have at least 8 characters"
+                                 },
+                                 maxLength: {
+                                    value: 12, 
+                                    message: "Password must have at most 12 characters"
+                                 }
+                                 } ) } />
                             {errors.password && <span className="form-error">{errors.password.message}</span>}
                         </div>
                         <button type="submit" className="btn btn-primary btn-large">{ mode === 'signup' ? "Sign Up" : "Log In" }</button>
