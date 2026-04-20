@@ -9,7 +9,7 @@ export default function Auth(){
     
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const { signUp, logIn, user, logOut } = useContext(AuthContext);
+    const { signUp, logIn } = useContext(AuthContext);
 
     const [ error, setError] = useState(null);
 
@@ -35,9 +35,6 @@ export default function Auth(){
             <div className="container">
                 <div className="auth-container">
                     <h1 className="page-title"> { mode === 'signup' ? "Sign Up" : "Log In" } </h1>
-                    <button onClick={()=>logOut()}>Logout</button> <br/>
-                    {user} <br/>
-                    {error && <div className="error-message"> {error} </div>}
                     <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
                         <div className="form-group">
                             <label htmlFor="email" className="form-label">Email</label>
