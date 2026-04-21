@@ -9,7 +9,7 @@ export default function Checkout(){
     const total = getCartTotal();
 
     function placeOrder(){
-        alert("Order Successful!");
+        alert( cartItems.length > 0 ? "Order Successful" : "No items selected");
         clearCart();
     }
 
