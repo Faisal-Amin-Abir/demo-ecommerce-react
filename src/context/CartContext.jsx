@@ -12,9 +12,9 @@ export default function CartProvider( { children } ) {
         
         if(existing){
             const currQuantity = existing.quantity;
-            const updatedCartItems = cartItems.map( (item) => {
-                return item.id === productId ? { ...item, quantity: currQuantity + 1 } : item
-            } );
+            const updatedCartItems = cartItems.map( (item) => 
+                item.id === productId ? { id: productId, quantity: currQuantity + 1 } : item
+             );
             setCartItems( updatedCartItems );
         }else{
             setCartItems( [ ...cartItems, { id: productId, quantity: 1 } ] );
