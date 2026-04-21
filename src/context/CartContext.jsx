@@ -47,5 +47,17 @@ export default function CartProvider( { children } ) {
         }
     }
 
-    return ( <CartContext.Provider value={ {cartItems, addToCart, getCartItemsWithProducts, updateQuantityValue, removeFromCart } }> {children} </CartContext.Provider> ) ;
+    function getCartTotal(){
+        const total = cartItems.reduce( (tot, item) => {
+            const prod = getProductById( item.id );
+            return tot + (prod ? prod.price * item.quantity : 0)
+        } , 0);
+        return total;
+    }
+
+    function clearCart(){
+        setCartItems([]);
+    }
+
+    return ( <CartContext.Provider value={ {clearCart, getCartTotal, cartItems, addToCart, getCartItemsWithProducts, updateQuantityValue, removeFromCart } }> {children} </CartContext.Provider> ) ;
 }

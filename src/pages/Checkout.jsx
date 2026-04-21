@@ -3,9 +3,15 @@ import { CartContext } from "../context/CartContext";
 
 export default function Checkout(){
 
-    const { getCartItemsWithProducts, updateQuantityValue } = useContext( CartContext );
+    const { clearCart, getCartTotal, getCartItemsWithProducts, updateQuantityValue, removeFromCart } = useContext( CartContext );
     
     const cartItems = getCartItemsWithProducts();
+    const total = getCartTotal();
+
+    function placeOrder(){
+        alert("Order Successful!");
+        clearCart();
+    }
 
     return (
         <div className="page">
@@ -31,9 +37,25 @@ export default function Checkout(){
                                         <span className="quantity-value">{item.quantity}</span>
                                         <button className="quantity-btn" onClick={ () => updateQuantityValue( item.id, item.quantity+1 ) }>+</button>
                                     </div>
+                                    <div>
+                                        <p className="checkout-item-total">${ (item.quantity * item.product.price).toFixed(2) }</p>
+                                    </div>
+                                    <button className="btn btn-secondary btn-small" onClick={ () => removeFromCart( item.id ) }>Remove</button>
                                 </div>
                             </div>
                         )}
+                    </div>
+                    <div className="checkout-summary"> 
+                        <h2 className="checkout-section-title">Total</h2>
+                        <div className="checkout-total">
+                            <p className="checkout-total-label">Subtotal:</p>
+                            <p className="checkout-total-value">${ total.toFixed(2) }</p>
+                        </div>
+                        <div className="checkout-total">
+                            <p className="checkout-total-label">Total:</p>
+                            <p className="checkout-total-value checkout-total-final">${ total.toFixed(2) }</p>
+                        </div>
+                        <button className="btn btn-primary btn-large btn-block" onClick={ () => placeOrder() }>Place Order</button>
                     </div>
                 </div>
             </div>
