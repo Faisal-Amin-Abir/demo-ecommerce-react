@@ -21,5 +21,31 @@ export default function CartProvider( { children } ) {
         }
     }
 
-    return ( <CartContext.Provider value={ {cartItems, addToCart } }> {children} </CartContext.Provider> ) ;
+    function getCartItemsWithProducts(){
+        return cartItems.map( item => (
+            {
+                ...item,
+                product: getProductById( item.id )
+            }
+        )).filter( item => item.product) ;
+    }
+
+    function removeFromCart( productId ){
+        setCartItems(
+                cartItems.filter( (item) => item.id !== productId )
+        );
+    }
+
+    function updateQuantityValue(productId, productQuantity){
+        if(productQuantity <= 0){
+            removeFromCart( productId );
+        }
+        else{
+            setCartItems(
+                cartItems.map( (item) => item.id === productId ? { id: item.id, quantity: productQuantity} : item)
+            );
+        }
+    }
+
+    return ( <CartContext.Provider value={ {cartItems, addToCart, getCartItemsWithProducts, updateQuantityValue, removeFromCart } }> {children} </CartContext.Provider> ) ;
 }

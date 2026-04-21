@@ -4,8 +4,8 @@ export const AuthContext = createContext(null);
 
 export default function AuthProvider( { children } ) {
 
-    const anyUser = localStorage.getItem("currentUserEmail");
-    const [ user, setUser] = useState(anyUser? anyUser : null );
+    const anyUser = localStorage.getItem( "currentUserEmail" );
+    const [ user, setUser ] = useState( anyUser ? anyUser : null );
     
     function signUp( email, password ) {
 
@@ -13,17 +13,17 @@ export default function AuthProvider( { children } ) {
         const newUser = {email, password};
         
         if(users.find( u => u.email === email)){
-            return { success: false, message: "User already signed up"};
+            return { success: false, message: "User already signed up" };
         }
         
         users.push(newUser);
-        localStorage.setItem("users", JSON.stringify(users));
-        localStorage.setItem("currentUserEmail", email);
+        localStorage.setItem( "users", JSON.stringify( users ) );
+        localStorage.setItem( "currentUserEmail", email );
         
-        setUser(email);
+        setUser( email );
     }
 
-    function logIn(email, password) {
+    function logIn( email, password ) {
         
         const users = JSON.parse( localStorage.getItem("users") || "[]" );
         const anyUser = localStorage.getItem("currentUserEmail");
@@ -43,8 +43,8 @@ export default function AuthProvider( { children } ) {
     }
 
     function logOut(){
-        setUser(null);
-        localStorage.removeItem("currentUserEmail");
+        setUser( null );
+        localStorage.removeItem( "currentUserEmail" );
     }
 
     return ( <AuthContext.Provider value={{signUp, logIn, user, logOut}}> {children} </AuthContext.Provider> ) ;
