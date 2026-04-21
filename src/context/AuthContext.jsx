@@ -8,14 +8,18 @@ export default function AuthProvider( { children } ) {
     const [ user, setUser] = useState(anyUser? anyUser : null );
     
     function signUp( email, password ) {
+
         const users = JSON.parse( localStorage.getItem("users") || "[]" );
         const newUser = {email, password};
+        
         if(users.find( u => u.email === email)){
             return { success: false, message: "User already signed up"};
         }
+        
         users.push(newUser);
         localStorage.setItem("users", JSON.stringify(users));
         localStorage.setItem("currentUserEmail", email);
+        
         setUser(email);
     }
 
@@ -23,9 +27,11 @@ export default function AuthProvider( { children } ) {
         
         const users = JSON.parse( localStorage.getItem("users") || "[]" );
         const anyUser = localStorage.getItem("currentUserEmail");
+        
         if(anyUser){
             return { success : false, message: "Another User already loggedIn"};
         }
+        
         if(users.find(u => u.email === email && u.password === password ) ) {
             localStorage.setItem("currentUserEmail", email);
             setUser(email);
