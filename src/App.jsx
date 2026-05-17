@@ -23,7 +23,6 @@ function App() {
           </Routes>
         </CartProvider>
       </AuthProvider>
-      
     </div>
   )
 }
